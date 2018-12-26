@@ -53,7 +53,7 @@ describe('DOM - event-handler', () => {
         done()
     })
 
-    it('Should remove appropriate event listner from dom if the new value is null', (done) => {
+    it('Should remove appropriate event listener from dom if the new value is null', (done) => {
         let firstEventClicked = false
         let node = document.createElement('div')
         let eventName = 'onClick'
@@ -66,6 +66,20 @@ describe('DOM - event-handler', () => {
         handleEventListener({ node, eventName, oldValue, newValue: null })
         simulateClick({ node })
         expect(firstEventClicked).to.be.true
+
+        done()
+    })
+
+    it('Should remove dom event key from ._listeners in dom element if the new value is null', (done) => {
+        let node = document.createElement('div')
+        let eventName = 'onClick'
+        let expectedDomEventName = 'click'
+        let oldValue = () => {}
+
+        handleEventListener({ node, eventName, oldValue: null, newValue: oldValue })
+        handleEventListener({ node, eventName, oldValue, newValue: null })
+
+        expect(node._listeners[expectedDomEventName]).to.be.undefined
 
         done()
     })

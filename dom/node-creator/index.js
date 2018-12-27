@@ -1,5 +1,5 @@
 export const createNode = ({
-    tagName
+    nodeName
 }) => {
-    return document.createElement(tagName)
+    return document.createElement(nodeName)
 }

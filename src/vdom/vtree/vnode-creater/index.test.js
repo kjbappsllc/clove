@@ -1,7 +1,7 @@
 import { createVNode } from '.'
 import { expect } from 'chai'
 
-describe('VDOM - vnode-creator', () => {
+describe('VDOM-VTREE - vnode-creator', () => {
     it('Should create normal vdom element when passed the neccesarry parameters', (done) => {
         const node = createVNode({
             vNodeName: 'div', 

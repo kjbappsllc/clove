@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:browser": "live-server --watch=./test/test-bundle.js --port=9000 --mount=/:test",
-    "test:watch": "webpack --mode development --watch"
+    "test:watch": "webpack --mode development --watch",
+    "playground": "babel ./src --out-dir ./compiled && node ./compiled/playground.js"
   },
   "author": "",
   "license": "ISC",

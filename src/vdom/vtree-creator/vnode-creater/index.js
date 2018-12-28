@@ -2,7 +2,7 @@ class VNode {}
 
 export const createVNode = ({
     vNodeName,
-    attributes = undefined,
+    attributes = {},
     key = null,
     children = []
 }) => {

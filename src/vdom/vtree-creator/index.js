@@ -14,13 +14,14 @@ import { iterateChildren } from './child-iterator'
 export const createVNodeTree = ({
     tree
 }) => {
-    const last = (arr) => arr[arr.length - 1]
     const traverse = node => {
-        if (!isNaN(node) || typeof node === 'string') {
+        let type = typeof node
+        if (['number', 'string'].includes(type)) {
             return String(node)
+        } else if ( ['boolean', 'function'].includes(type) || !node) {
+            return null
         }
-
-        const childrenStack = iterateChildren(node.children)
+        const childrenStack = iterateChildren({ children: node.children })
         const children = []
 
         while (childrenStack.length) {
@@ -29,7 +30,7 @@ export const createVNodeTree = ({
             if (typeof VNode === 'string' && typeof children[children.length - 1] === 'string') {
                 children[children.length - 1] += VNode
             } else {
-                children.push(VNode)
+                (VNode && children.push(VNode))
             }
         }
 
@@ -41,7 +42,8 @@ export const createVNodeTree = ({
             return result;
         }, {});
         const key = node.key
-        return createVNode({ vNodeName, attributes, key, children })
+        const args = { vNodeName, attributes, key, children }
+        return typeof vNodeName === 'function' ? args :  createVNode({ ...args })
     }
 
     return traverse(tree)

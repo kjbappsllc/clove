@@ -1,6 +1,6 @@
 import { createVNodeTree } from './vdom/vtree-creator'
 
-const container = ({}) => ({
+const test = () => ({
     node: 'div',
     onClick: () => { console.log('clicked') },
     className: 'test-class',
@@ -15,5 +15,20 @@ const container = ({}) => ({
         }, "Test"]
 })
 
-const element = createVNodeTree({ tree: container({}) })
-console.log(element)
+const functionalComp = ({ testProp }) => ({
+    node: 'div',
+    className: 'hello-my-class',
+    children: 10
+})
+
+const element = createVNodeTree({ 
+    tree: { 
+        node: functionalComp,
+        testProp: 10,
+        children: [{
+            node: 'div',
+            className: 'test-className',
+            children: 5
+        }, 6]
+    }
+})

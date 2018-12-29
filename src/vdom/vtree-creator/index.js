@@ -14,36 +14,35 @@ import { iterateChildren } from './child-iterator'
 export const createVNodeTree = ({
     tree
 }) => {
-    const traverse = node => {
-        let type = typeof node
+    const traverse = treeRoot => {
+        let type = typeof treeRoot
         if (['number', 'string'].includes(type)) {
-            return String(node)
-        } else if ( ['boolean', 'function'].includes(type) || !node) {
+            return String(treeRoot)
+        } else if ( ['boolean', 'function'].includes(type) || !treeRoot) {
             return null
         }
-        const childrenStack = iterateChildren({ children: node.children })
+        const childrenStack = iterateChildren({ children: treeRoot.children })
         const children = []
 
         while (childrenStack.length) {
-            const child = childrenStack.pop()
-            const VNode = traverse(child)
-            if (typeof VNode === 'string' && typeof children[children.length - 1] === 'string') {
-                children[children.length - 1] += VNode
+            const child = traverse(childrenStack.pop())
+            if (typeof child === 'string' && typeof children[children.length - 1] === 'string') {
+                children[children.length - 1] += child
             } else {
-                (VNode && children.push(VNode))
+                (child && children.push(child))
             }
         }
 
-        const vNodeName = node.node
-        const attributes = Object.keys(node).reduce((result, key) => {
+        const node = treeRoot.node
+        const props = Object.keys(treeRoot).reduce((result, key) => {
             if (!['node', 'children'].includes(key)) {
-                result[key] = node[key];
+                result[key] = treeRoot[key];
             }
             return result;
         }, {});
-        const key = node.key
-        const args = { vNodeName, attributes, key, children }
-        return typeof vNodeName === 'function' ? args :  createVNode({ ...args })
+        const key = treeRoot.key
+        const args = { node, props, key, children }
+        return createVNode({ ...args })
     }
 
     return traverse(tree)

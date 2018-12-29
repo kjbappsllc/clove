@@ -2,13 +2,13 @@ import { createVNodeTree } from '.'
 import { expect } from 'chai'
 
 const buildNode = ({
-    vNodeName,
-    attributes={},
-    key=null,
+    node,
+    props={},
+    key=undefined,
     children=[]
 }) => ({
-    vNodeName: vNodeName,
-    attributes: attributes,
+    node: node,
+    props: props,
     key: key,
     children: children
 });
@@ -19,17 +19,17 @@ describe('VDOM - vtree-creator', () => {
 		expect( () => tree = createVNodeTree({ tree: { node: 'foo' }})).not.to.throw()
 		expect(tree).to.be.an('object')
 		expect(tree.constructor.name).to.be.equal('VNode')
-		expect(tree).to.have.property('vNodeName', 'foo')
-		expect(tree).to.have.property('attributes').that.eql({})
+		expect(tree).to.have.property('node', 'foo')
+		expect(tree).to.have.property('props').that.eql({})
         expect(tree).to.have.property('children').that.eql([])
         done()
     });
     
-    it('Should preserve raw attributes', (done) => {
+    it('Should preserve raw props', (done) => {
 		let attrs = { foo:'bar', baz:10, func:()=>{} }
 		let tree = createVNodeTree({tree: {node: 'foo', ...attrs}})
 		expect(tree).to.be.an('object')
-        expect(tree).to.have.deep.property('attributes', attrs)
+        expect(tree).to.have.deep.property('props', attrs)
         expect(tree).to.have.property('children').that.eql([])
         done()
     });
@@ -41,8 +41,8 @@ describe('VDOM - vtree-creator', () => {
         }})
 		expect(tree).to.be.an('object')
 		expect(tree).to.have.deep.property('children',[
-            buildNode({ vNodeName: 'bar' }),
-            buildNode({ vNodeName: 'baz' })
+            buildNode({ node: 'bar' }),
+            buildNode({ node: 'baz' })
         ])
         done()
     });
@@ -55,8 +55,8 @@ describe('VDOM - vtree-creator', () => {
 
 		expect(tree).to.be.an('object')
 		expect(tree).to.have.deep.property('children', [
-            buildNode({ vNodeName: 'bar', children: [buildNode({ vNodeName: 'test' })] }),
-            buildNode({ vNodeName: 'baz' })
+            buildNode({ node: 'bar', children: [buildNode({ node: 'test' })] }),
+            buildNode({ node: 'baz' })
         ])
         done()
     });
@@ -93,9 +93,9 @@ describe('VDOM - vtree-creator', () => {
 		expect(tree).to.be.an('object')
 		expect(tree).to.have.deep.property('children', [
             'testone',
-			buildNode({vNodeName: 'bar'}),
+			buildNode({node: 'bar'}),
 			'three',
-			buildNode({vNodeName: 'baz'}),
+			buildNode({node: 'baz'}),
             'fourfive6'
         ]);
         done()
@@ -110,16 +110,18 @@ describe('VDOM - vtree-creator', () => {
         done()
     });
     
-    it('Should not create a VNode for a functional node type, but should still process children', (done) => {
+    it('Should create a VNode for a functional node type and not execute function', (done) => {
         let Component = ({children}) => children;
-        let tree = createVNodeTree({ tree: { node: Component, children: [ {node: 'bar'}, 5 ] }})
+        let tree = createVNodeTree({ tree: { node: Component, testProp: 5, children: [ {node: 'bar'}, 5 ] }})
         
         expect(tree).to.be.an('object')
-        expect(tree.vNodeName).to.be.eql(Component)
+        expect(tree.node).to.be.eql(Component)
 	    expect(tree).to.have.deep.property('children', [
-            buildNode({ vNodeName: 'bar'}),
+            buildNode({ node: 'bar'}),
             '5'
         ])
+        expect(tree).to.have.deep.property('props', {testProp: 5})
+        expect(tree.constructor.name).to.be.eql('VNode')
         done()
 	});
 })

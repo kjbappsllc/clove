@@ -1,14 +1,14 @@
 class VNode {}
 
 export const createVNode = ({
-    vNodeName,
-    attributes = {},
-    key = null,
+    node,
+    props = {},
+    key = undefined,
     children = []
 }) => {
     const newVNode = new VNode()
-    newVNode.vNodeName = vNodeName
-    newVNode.attributes = attributes
+    newVNode.node = node
+    newVNode.props = props
     newVNode.key = key
     newVNode.children = children
     return newVNode

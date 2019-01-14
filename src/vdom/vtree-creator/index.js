@@ -1,4 +1,4 @@
-import { createVNode } from './vnode-creater'
+import { createVNode } from './vnode-creator'
 import { iterateChildren } from './child-iterator'
 
 /*

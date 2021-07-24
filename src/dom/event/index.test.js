@@ -1,6 +1,6 @@
-import { handleEventListener } from '.'
+import { handleEvent } from '.'
 import { expect } from 'chai'
-import { simulateClick } from '../../utils/test-utils'
+import { simulateClick } from '../../utils'
 
 describe('DOM - event-handler', () => {
 
@@ -9,7 +9,7 @@ describe('DOM - event-handler', () => {
         let eventName = 'onClick'
         let oldValue = void 0
         let newValue = () => {}
-        handleEventListener({ node, eventName, oldValue, newValue })
+        handleEvent({ node, eventName, oldValue, newValue })
         expect(node._listeners).to.exist
         done()
     })
@@ -20,7 +20,7 @@ describe('DOM - event-handler', () => {
         let expectedDomEventName = 'click'
         let oldValue = void 0
         let newValue = () => {}
-        handleEventListener({ node, eventName, oldValue, newValue })
+        handleEvent({ node, eventName, oldValue, newValue })
         expect(node._listeners[expectedDomEventName]).to.exist
         done()
     })
@@ -32,7 +32,7 @@ describe('DOM - event-handler', () => {
         let oldValue = void 0
         let newValue = () => { firstEventClicked = true }
 
-        handleEventListener({ node, eventName, oldValue, newValue })
+        handleEvent({ node, eventName, oldValue, newValue })
         simulateClick({ node })
 
         expect(firstEventClicked).to.be.true
@@ -46,7 +46,7 @@ describe('DOM - event-handler', () => {
         let oldValue = () => {}
         let newValue = () => { firstEventClicked = true }
 
-        handleEventListener({ node, eventName, oldValue, newValue })
+        handleEvent({ node, eventName, oldValue, newValue })
         simulateClick({ node })
 
         expect(firstEventClicked).to.be.false
@@ -59,11 +59,11 @@ describe('DOM - event-handler', () => {
         let eventName = 'onClick'
         let oldValue = () => { firstEventClicked = !firstEventClicked }
 
-        handleEventListener({ node, eventName, oldValue: null, newValue: oldValue })
+        handleEvent({ node, eventName, oldValue: null, newValue: oldValue })
         simulateClick({ node })
         expect(firstEventClicked).to.be.true
 
-        handleEventListener({ node, eventName, oldValue, newValue: null })
+        handleEvent({ node, eventName, oldValue, newValue: null })
         simulateClick({ node })
         expect(firstEventClicked).to.be.true
 
@@ -76,8 +76,8 @@ describe('DOM - event-handler', () => {
         let expectedDomEventName = 'click'
         let oldValue = () => {}
 
-        handleEventListener({ node, eventName, oldValue: null, newValue: oldValue })
-        handleEventListener({ node, eventName, oldValue, newValue: null })
+        handleEvent({ node, eventName, oldValue: null, newValue: oldValue })
+        handleEvent({ node, eventName, oldValue, newValue: null })
 
         expect(node._listeners[expectedDomEventName]).to.be.undefined
 

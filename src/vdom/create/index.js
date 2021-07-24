@@ -1,24 +1,32 @@
-import { createVNode } from './vnode-creator'
-import { iterateChildren } from './child-iterator'
-
-/*
-    Simple example:
-    {
-        node: 'div',
-        onClick: () => {console.log('clicked')},
-        className: 'test-class'
-        children: 5
+class VNode {
+    constructor({ node, key, props, children }) {
+        this.key = key
+        this.node = node
+        this.props = props
+        this.children = children
     }
-*/
+}
 
-export const createVNodeTree = ({
+const iterateChildren = ({ children }) => {
+    if (children === null || (!children && isNaN(parseInt(children)))) {
+        return []
+    }
+    if ((children).constructor !== Array) {
+        return [children]
+    }
+    const stack = []
+    for (let i = children.length; i-- > 0;) stack.push(children[i])
+    return stack
+}
+
+export const createVDom = ({
     tree
 }) => {
     const traverse = treeRoot => {
         let type = typeof treeRoot
         if (['number', 'string'].includes(type)) {
             return String(treeRoot)
-        } else if ( ['boolean', 'function'].includes(type) || !treeRoot) {
+        } else if (['boolean', 'function'].includes(type) || !treeRoot) {
             return null
         }
         const childrenStack = iterateChildren({ children: treeRoot.children })
@@ -42,7 +50,7 @@ export const createVNodeTree = ({
         }, {});
         const key = treeRoot.key
         const args = { node, props, key, children }
-        return createVNode({ ...args })
+        return new VNode({ ...args })
     }
 
     return traverse(tree)

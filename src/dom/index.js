@@ -1,17 +1,8 @@
-import { setAttribute } from './attr-setter'
-import { handleEventListener } from './event-handler'
-import { createNode } from './node-creator'
-import { removeNode } from './node-remover'
-import { setRef } from './reference-setter'
-import { setStyle } from './style-setter'
-import { createText } from './text-creator'
+import { handleEvent } from './event'
+import { createNode, removeNode } from './node'
 
 export {
-    setAttribute,
-    handleEventListener,
+    handleEvent,
     createNode,
     removeNode,
-    setRef,
-    setStyle,
-    createText
 }

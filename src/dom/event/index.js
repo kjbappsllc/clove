@@ -1,4 +1,4 @@
-export const handleEventListener = ({
+export const handleEvent = ({
     node,
     eventName,
     oldValue,
